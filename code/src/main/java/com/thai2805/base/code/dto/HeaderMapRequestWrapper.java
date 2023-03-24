@@ -20,7 +20,7 @@ public class HeaderMapRequestWrapper extends HttpServletRequestWrapper {
         super(request);
     }
 
-    private Map<String, String> headerMap = new HashMap<String, String>();
+    private Map<String, String> headerMap = new HashMap<>();
 
 
     /**

@@ -3,11 +3,9 @@ package com.thai2805.base.code.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.io.Serializable;
-
 @Builder
 @Data
-public class LogWrapperDTO implements Serializable {
+public class LogWrapperDTO {
     private String requestId;
     private String type;
     private String method;

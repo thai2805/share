@@ -5,6 +5,7 @@ import com.thai2805.base.code.config.Constants;
 import com.thai2805.base.code.dto.LogWrapperDTO;
 import com.thai2805.base.code.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
@@ -56,6 +57,7 @@ public class RequestResponseLoggingConfig extends RequestBodyAdviceAdapter imple
             long elapsedTime = System.currentTimeMillis() - startTime;
             logWrapperDto.setTimeHandle(elapsedTime);
         } catch (Exception e) {
+            log.warn("Calculator time handle is error : {}", ExceptionUtils.getStackTrace(e));
         }
 
         log.info(gson.toJson(logWrapperDto));
@@ -70,6 +72,7 @@ public class RequestResponseLoggingConfig extends RequestBodyAdviceAdapter imple
         try {
             httpServletRequest.setAttribute(START_TIME, startTime);
         } catch (Exception e) {
+            log.warn("Add start time is error : {}", ExceptionUtils.getStackTrace(e));
         }
 
         Map<String, Object> data = new HashMap<>();

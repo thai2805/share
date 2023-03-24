@@ -1,18 +1,26 @@
 package com.thai2805.base.code.utils;
 
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
+@Slf4j
 public class Utils {
+    private static Random random = new Random();
+
+    private Utils() {
+    }
+
     public static String generateRequestId(){
         Date currentDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String requestId = sdf.format(currentDate);
-        Random random = new Random();
         Integer tmpRd =  random.nextInt(998) + 1;
         if(tmpRd < 10){
             requestId += "00" + tmpRd;
@@ -28,7 +36,7 @@ public class Utils {
         return var0 == null ? null : var0.toString();
     }
 
-    public static HttpStatus standardizeErrorCodes (HttpStatus httpStatus) {
+    private static HttpStatus standardizeErrorCodes (HttpStatus httpStatus) {
         if (httpStatus == null) {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
@@ -42,6 +50,7 @@ public class Utils {
         try {
             return standardizeErrorCodes(HttpStatus.valueOf(Integer.parseInt(value)));
         } catch (Exception e) {
+            log.warn("standardizeErrorCodes is error : {}", ExceptionUtils.getStackTrace(e));
         }
         return HttpStatus.INTERNAL_SERVER_ERROR;
     }

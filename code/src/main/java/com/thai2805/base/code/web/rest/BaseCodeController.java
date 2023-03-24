@@ -32,7 +32,7 @@ public class BaseCodeController {
     private BaseCodeService baseCodeService;
 
     @GetMapping("/healthCheck")
-    public ResponseEntity<String> Test() {
+    public ResponseEntity<String> test() {
         return ResponseEntity.ok("Rating And Feedback service is live");
     }
 

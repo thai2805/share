@@ -67,23 +67,26 @@ public class FeignLoggingConfig {
             headerMap.addHeader(Constants.REQUEST_ID, requestId);
             httpServletRequest.setAttribute(START_TIME, startTime);
         } catch (Exception e) {
+            log.warn("Add start time is error : {}", ExceptionUtils.getStackTrace(e));
         }
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
-        String url = "", path = "";
+        String url = "";
+        String path = "";
         List<Object> data = Collections.emptyList();
         try {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder("");
             sb.append(joinPoint.getTarget().toString());
-            url = sb.toString().substring(sb.toString().indexOf("url=") + 4, sb.toString().length() - 1);
+            url = sb.substring(sb.toString().indexOf("url=") + 4, sb.toString().length() - 1);
             path = Arrays.toString(requestMapping.path());
             path = env.getProperty(path.substring("[${".length(), path.length() - "}]".length()));
 
             // Remove all header in log.
             data = Arrays.stream(joinPoint.getArgs()).filter(o -> !(o instanceof LinkedHashMap)).collect(Collectors.toList());
         } catch (Exception e) {
+            log.warn("Get url & path is error : {}", ExceptionUtils.getStackTrace(e));
         }
         LogWrapperDTO logWrapperDTO = LogWrapperDTO.builder().requestId(requestId).type(REQUEST).method(Arrays.toString(requestMapping.method())).functionName(joinPoint.getSignature().getName()).path(path).url(url).message(data.toString()).build();
         log.info(gson.toJson(logWrapperDTO));
@@ -99,21 +102,23 @@ public class FeignLoggingConfig {
             long elapsedTime = System.currentTimeMillis() - startTime;
             logWrapperDto.setTimeHandle(elapsedTime);
         } catch (Exception e) {
+            log.warn("Calculator time handle is error : {}", ExceptionUtils.getStackTrace(e));
         }
 
         //Get http code
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-        logWrapperDto.setHttpCode(Utils.valueOf(response.getStatus()));
+        logWrapperDto.setHttpCode(Utils.valueOf(response != null ? response.getStatus() : null));
 
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
-        String url = "", path = "";
+        String url = "";
+        String path = "";
         try {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append(joinPoint.getTarget().toString());
-            url = sb.toString().substring(sb.toString().indexOf("url=") + 4, sb.toString().length() - 1);
+            url = sb.substring(sb.toString().indexOf("url=") + 4, sb.toString().length() - 1);
             path = Arrays.toString(requestMapping.path());
             path = env.getProperty(path.substring("[${".length(), path.length() - "}]".length()));
         } catch (Exception e) {
@@ -137,6 +142,7 @@ public class FeignLoggingConfig {
             long elapsedTime = System.currentTimeMillis() - startTime;
             logWrapperDto.setTimeHandle(elapsedTime);
         } catch (Exception e) {
+            log.warn("Calculator time handle is error : {}", ExceptionUtils.getStackTrace(e));
         }
 
         logWrapperDto.setMessage(exception.toString());

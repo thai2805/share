@@ -18,6 +18,7 @@ public class FeignClientInterceptor implements RequestInterceptor {
     public void apply(RequestTemplate template) {
         // Forward token
         // SecurityUtils.getCurrentUserJWT().ifPresent(s -> template.header(AUTHORIZATION_HEADER, String.format("%s %s", BEARER, s)));
+
         // Forward request id
         template.header(Constants.REQUEST_ID, httpServletRequest.getHeader(Constants.REQUEST_ID));
     }

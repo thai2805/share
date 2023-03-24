@@ -118,13 +118,14 @@ public class AdviceExceptionHandler {
 
     private ResponseEntity wrapperResponse(String errorCode, HttpStatus httpStatus) {
         return new ResponseEntity(BasicControllerResponse.builder()
-                .data("")
+                .data(httpStatus.toString())
+                .errorCode(errorCode)
                 .build(),
                 HttpStatus.OK);
     }
 
     private ResponseEntity wrapperResponse(Optional<ByteBuffer> body, Integer httpStatus) {
-        String response = new String(body.get().array(), StandardCharsets.UTF_8);
+        String response = new String(body.isPresent() ? body.get().array() : "Empty".getBytes(), StandardCharsets.UTF_8);
         try {
             return new ResponseEntity(gson.fromJson(response, BasicControllerResponse.class), HttpStatus.OK);
         } catch (Exception e) {

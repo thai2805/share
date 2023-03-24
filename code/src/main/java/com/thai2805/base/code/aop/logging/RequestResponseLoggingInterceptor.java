@@ -5,6 +5,7 @@ import com.thai2805.base.code.config.Constants;
 import com.thai2805.base.code.dto.LogWrapperDTO;
 import com.thai2805.base.code.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.DispatcherType;
 import org.springframework.http.HttpMethod;
@@ -32,6 +33,7 @@ public class RequestResponseLoggingInterceptor implements HandlerInterceptor {
             try {
                 httpServletRequest.setAttribute(RequestResponseLoggingConfig.START_TIME, startTime);
             } catch (Exception e) {
+                log.warn("Add start time is error : {}", ExceptionUtils.getStackTrace(e));
             }
 
             Map<String, Object> data = new HashMap<>();
