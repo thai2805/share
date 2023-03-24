@@ -1,0 +1,64 @@
+# ===================================================================
+# Spring Boot configuration for the "dev" profile.
+#
+# This configuration overrides the application.yml file.
+#
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+logging:
+  level:
+    ROOT: INFO
+    tech.jhipster: DEBUG
+    org.hibernate.SQL: DEBUG
+    com.thai2805.base.code: DEBUG
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=code
+    username: postgres
+    password: postgrespw
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+      minimum-idle: 2
+      maximum-pool-size: 2
+      idle-timeout: 30000
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    ddl-auto: update
+  output:
+    ansi:
+      console-available: true
+
+management:
+  metrics:
+    export:
+      prometheus:
+        enabled: false
+
+server:
+  port: 8080
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+#
+# More documentation is available at:
+# https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+# application:
+
+internal:
+  filemanager:
+    endpoint:
+      url: ${INTERNAL_FILEMANAGER_ENDPOINT.URL:http://mobile-file-manager-service/v1/file-manager}
+      getInfoS3: /generatePresignedUrl
+      getUrlS3: /getPresignedUrl
